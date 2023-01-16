@@ -13,7 +13,7 @@ def index(request):
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
 
     # Books that contain a particular word (case-insensitive)
-    num_books_specific = Book.objects.filter().count()
+    num_books_specific = Book.objects.filter(title__icontains='potter'.lower()).count()
 
     # The 'all()' is implied by default.
     num_authors = Author.objects.count()
@@ -23,6 +23,7 @@ def index(request):
         'num_books': num_books,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
+        'num_books_specific': num_books_specific,
         'num_authors': num_authors,
         'num_genres': num_genres,
     }
