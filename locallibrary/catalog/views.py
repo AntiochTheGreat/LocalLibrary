@@ -118,3 +118,28 @@ class LoanedBooksByAllListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
+
+
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
+from .models import Author
+
+
+class AuthorCreate(LoginRequiredMixin, CreateView):
+    model = Author
+    permission_required = 'catalog.can_mark_returned'
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    initial = {'date_of_death': '11/06/2020'}
+
+
+class AuthorUpdate(LoginRequiredMixin, UpdateView):
+    model = Author
+    permission_required = 'catalog.can_mark_returned'
+    fields = '__all__'  # Not recommended (potential security issue if more fields added)
+
+
+class AuthorDelete(LoginRequiredMixin, DeleteView):
+    model = Author
+    permission_required = 'catalog.can_mark_returned'
+    success_url = reverse_lazy('authors')
